@@ -40,8 +40,6 @@ public partial class Cursor : Node2D
 
 	public override void _UnhandledInput(InputEvent @event)
 	{
-		base._UnhandledInput(@event);
-
 		if (@event is InputEventMouseMotion mouseMotionEvent)
 			Cell = Grid.CalculateGridCoordinates(mouseMotionEvent.Position);	
 		

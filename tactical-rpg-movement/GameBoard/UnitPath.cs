@@ -12,19 +12,19 @@ public partial class UnitPath : TileMapLayer
 	[Export] public Grid Grid {get; set;}
 	
 	private PathFinder _pathFinder;
-	private Vector2[] _currentPath = [];
+	public Array<Vector2> CurrentPath = [];
 	
-	public void Initialize(Vector2[] walkableCells) =>
+	public void Initialize(IEnumerable<Vector2> walkableCells) =>
 		_pathFinder = new PathFinder(Grid, walkableCells);
 
 	public new void Draw(Vector2 cellStart, Vector2 cellEnd)
 	{
 		Clear();
-		_currentPath = _pathFinder.CalculatePointPath(cellStart, cellEnd);
+		CurrentPath = new Array<Vector2>(_pathFinder.CalculatePointPath(cellStart, cellEnd));
 
-		var path = new Vector2I[_currentPath.Length];
-		for (int i = 0; i < _currentPath.Length; ++i)
-			path[i] = (Vector2I)_currentPath[i];
+		var path = new Vector2I[CurrentPath.Count];
+		for (int i = 0; i < CurrentPath.Count; ++i)
+			path[i] = (Vector2I)CurrentPath[i];
 		
 		SetCellsTerrainConnect(new Array<Vector2I>(path), 0, 0);
 	}

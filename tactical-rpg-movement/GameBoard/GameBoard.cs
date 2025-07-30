@@ -2,21 +2,15 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using Godot.Collections;
-using GodotOnReady.Attributes;
 
 public partial class GameBoard : Node2D
 {
 	[Export] public Grid Grid {get; set;}
 	
-	[OnReadyGet("UnitOverlay")]
-	private UnitOverlay _unitOverlay;
-	
-	[OnReadyGet("UnitPath")]
-	private UnitPath _unitPath;
-	
 	private Unit _activeUnit;
-	
-	private Array<Vector2I> _walkableCell = [];
+	private UnitPath _unitPath;
+	private UnitOverlay _unitOverlay;
+	private Array<Vector2> _walkableCell = [];
 	
 	public static readonly Vector2[] Directions = 
 	[
@@ -28,21 +22,88 @@ public partial class GameBoard : Node2D
 	
 	private Godot.Collections.Dictionary<Vector2, Unit> _units = new();
 	
-	private bool IsOccupied(Vector2 pos) => _units.ContainsKey(pos);
-
-	[OnReady] private void Reinitialize()
-	{
-		_units.Clear();
-		foreach (var child in GetChildren())
-		{
-			var unit = child as Unit;
-			if (unit is not null) 
-				_units[unit.Cell] = unit;
-		}
-	}
+	public bool IsOccupied(Vector2 pos) => _units.ContainsKey(pos);
 
 	public IEnumerable<Vector2> GetWalkableCells(Unit unit)
 		=> FloodFill(unit.Cell, unit.MoveRange);
+
+	public override void _Ready()
+	{
+		_unitPath = GetNodeOrNull<UnitPath>("UnitPath");
+		_unitOverlay = GetNodeOrNull<UnitOverlay>("UnitOverlay");
+		
+		Reinitialize();
+	}
+	
+	private void SelectUnit(Vector2 cell)
+	{
+		if(!_units.TryGetValue(cell, out var unit)) return;
+		
+		_activeUnit = unit;
+		_activeUnit.IsSelected = true;
+		_walkableCell = (Array<Vector2>)GetWalkableCells(_activeUnit);
+		_unitOverlay.DrawOverlay(_walkableCell);
+		_unitPath.Initialize(_walkableCell);
+	}
+
+	private void DeselectActiveUnit()
+	{
+		_activeUnit.IsSelected = false;
+		_unitOverlay.Clear();
+		_unitPath.Stop();
+	}
+
+	private void ClearActiveUnit()
+	{
+		_activeUnit = null;
+		_walkableCell.Clear();
+	}
+
+	private async void MoveActiveUnit(Vector2 newCell)
+	{
+		if(IsOccupied(newCell) || ! _walkableCell.Contains(newCell))
+			return;
+		
+		_units.Remove(_activeUnit.Cell);
+		DeselectActiveUnit();
+		_activeUnit.WalkAlong(_unitPath.CurrentPath);
+		await ToSignal(_activeUnit, nameof(Unit.SignalName.WalkFinished));
+
+		_activeUnit.Cell = newCell;
+		_units[newCell] = _activeUnit;
+		ClearActiveUnit();
+	}
+
+	public void OnCursorAcceptPressed(Vector2 cell)
+	{
+		if(_activeUnit is null)
+			SelectUnit(cell);
+		else if(_activeUnit is { IsSelected: true })
+			MoveActiveUnit(cell);
+	}
+
+	public void OnCursorMoved(Vector2 newCell)
+	{
+		if(_activeUnit is not null && _activeUnit.IsSelected)
+			_unitPath.Draw(_activeUnit.Cell, newCell);
+	}
+
+	public override void _UnhandledInput(InputEvent @event)
+	{
+		if (_activeUnit is not null && @event.IsActionPressed("ui_cancel"))
+		{
+			DeselectActiveUnit();
+			ClearActiveUnit();
+		}
+	}
+
+	public void Reinitialize()
+	{
+		_units.Clear();
+		foreach (var child in GetChildren())
+			if (child is Unit unit) 
+				_units[unit.Cell] = unit;
+	}
 	
 	private IEnumerable<Vector2> FloodFill(Vector2 cell, uint maxDistance)
 	{

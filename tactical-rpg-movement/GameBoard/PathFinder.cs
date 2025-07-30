@@ -14,7 +14,7 @@ public partial class PathFinder : RefCounted
 	private Grid _grid;
 	private AStar2D _astar = new();
 	
-	public PathFinder(Grid grid, Vector2[] walkableCells)
+	public PathFinder(Grid grid, IEnumerable<Vector2> walkableCells)
 	{
 		_grid = grid;
 		var cellMappings = new Godot.Collections.Dictionary<Vector2, int>();

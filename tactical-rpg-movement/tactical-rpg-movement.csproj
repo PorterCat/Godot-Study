@@ -5,6 +5,6 @@
     <RootNamespace>tacticalrpgmovement</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="GodotOnReady" Version="1.2.4" />
+    <PackageReference Include="GodotGetNode" Version="0.2.2" />
   </ItemGroup>
 </Project>

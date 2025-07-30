@@ -1,4 +1,7 @@
+using System.Collections.Generic;
+using System.Linq;
 using Godot;
+using Godot.Collections;
 
 #if TOOLS
 [Tool]
@@ -59,19 +62,13 @@ public partial class Unit : Path2D
 		{
 			_isWalking = value;
 			SetProcess(_isWalking);
-			// if (!Engine.IsEditorHint())
-			// 	SetProcess(_isWalking);
 		}
 	}
 	
-	// private Sprite2D _sprite;
-	// private AnimationPlayer _animPlayer;
 	private PathFollow2D _pathFollow;
 	
 	public override void _Ready()
 	{
-		// _sprite = GetNodeOrNull<Sprite2D>("PathFollow2D/Sprite");
-		// _animPlayer = GetNodeOrNull<AnimationPlayer>("AnimationPlayer");
 		_pathFollow = GetNodeOrNull<PathFollow2D>("PathFollow2D");
 
 		if (Engine.IsEditorHint())
@@ -85,20 +82,10 @@ public partial class Unit : Path2D
 		
 		SetProcess(false);
 		Cell = Grid.CalculateGridCoordinates(Position);
-		Position = Grid.CalculateGridCoordinates(Cell);
+		Position = Grid.CalculateMapPosition(Cell);
 		
 		if (!Engine.IsEditorHint())
 			Curve = new Curve2D();
-		
-		Godot.Collections.Array<Vector2> points =
-		[
-			new(2, 2),
-			new(2, 5),
-			new(8, 5),
-			new(8, 7),
-		];
-		
-		WalkAlong(points);
 	}
 	
 	public override void _Process(double delta)
@@ -115,13 +102,12 @@ public partial class Unit : Path2D
 		}
 	}
 	
-	public void WalkAlong(Godot.Collections.Array<Vector2> path)
+	public void WalkAlong(Array<Vector2> path)
 	{
 		if (path == null || path.Count == 0)
 			return;
 		
 		Curve.ClearPoints();
-		Curve.AddPoint(Vector2.Zero);
 		
 		foreach (Vector2 point in path)
 		{

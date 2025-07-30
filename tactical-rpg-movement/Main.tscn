@@ -16,6 +16,7 @@
 script = ExtResource("1_r0du0")
 
 [node name="Map" parent="." instance=ExtResource("1_glv2v")]
+position = Vector2(0, 0)
 
 [node name="GameBoard" type="Node2D" parent="."]
 script = ExtResource("3_lgr22")
@@ -25,11 +26,41 @@ Grid = ExtResource("4_fos0i")
 
 [node name="UnitPath" parent="GameBoard" instance=ExtResource("7_trn2v")]
 
+[node name="Cursor" parent="GameBoard" instance=ExtResource("3_cm0pq")]
+
 [node name="Unit" parent="GameBoard" instance=ExtResource("2_uu6xs")]
-position = Vector2(281, 57)
+position = Vector2(40, 57)
 curve = SubResource("Curve2D_3dxm6")
 Grid = ExtResource("4_fos0i")
 Skin = ExtResource("7_lgr22")
 SkinOffset = Vector2(6, -1)
 
-[node name="Cursor" parent="GameBoard" instance=ExtResource("3_cm0pq")]
+[node name="Unit2" parent="GameBoard" instance=ExtResource("2_uu6xs")]
+position = Vector2(400, 600)
+curve = SubResource("Curve2D_3dxm6")
+Grid = ExtResource("4_fos0i")
+MoveRange = 2
+MoveSpeed = 200.0
+Skin = ExtResource("7_lgr22")
+SkinOffset = Vector2(6, -1)
+
+[node name="Unit3" parent="GameBoard" instance=ExtResource("2_uu6xs")]
+position = Vector2(776, 328)
+curve = SubResource("Curve2D_3dxm6")
+Grid = ExtResource("4_fos0i")
+MoveRange = 15
+MoveSpeed = 1000.0
+Skin = ExtResource("7_lgr22")
+SkinOffset = Vector2(6, -1)
+
+[node name="Unit4" parent="GameBoard" instance=ExtResource("2_uu6xs")]
+position = Vector2(392, 232)
+curve = SubResource("Curve2D_3dxm6")
+Grid = ExtResource("4_fos0i")
+MoveRange = 4
+MoveSpeed = 2000.0
+Skin = ExtResource("7_lgr22")
+SkinOffset = Vector2(6, -1)
+
+[connection signal="AcceptPressed" from="GameBoard/Cursor" to="GameBoard" method="OnCursorAcceptPressed"]
+[connection signal="Moved" from="GameBoard/Cursor" to="GameBoard" method="OnCursorMoved"]

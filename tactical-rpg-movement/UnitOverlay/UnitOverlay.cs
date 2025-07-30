@@ -6,9 +6,10 @@ using Godot.Collections;
 
 public partial class UnitOverlay : TileMapLayer
 {
-	public new void Draw(IEnumerable<Vector2> cells)
+	public void DrawOverlay(IEnumerable<Vector2> cells)
 	{
 		Clear();
-		SetCellsTerrainConnect(new Array<Vector2I>(cells.Select(x => (Vector2I)x)), 0, 0);
+		var arr = new Array<Vector2I>(cells.Select(x => (Vector2I)x));
+		SetCellsTerrainConnect(arr, 0, 0, false);
 	}
 }
