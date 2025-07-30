@@ -1,0 +1,10 @@
+[gd_scene load_steps=4 format=3 uid="uid://cqri4k5yd6jgh"]
+
+[ext_resource type="TileSet" uid="uid://dqg14aj86so4a" path="res://GameBoard/unit_path_tileset.tres" id="1_mo4qo"]
+[ext_resource type="Script" uid="uid://ddf4a8hbejdi7" path="res://GameBoard/UnitPath.cs" id="2_cfxde"]
+[ext_resource type="Resource" uid="uid://djme656lksl2w" path="res://GameBoard/Grid.tres" id="3_66wgl"]
+
+[node name="UnitPath" type="TileMapLayer"]
+tile_set = ExtResource("1_mo4qo")
+script = ExtResource("2_cfxde")
+Grid = ExtResource("3_66wgl")

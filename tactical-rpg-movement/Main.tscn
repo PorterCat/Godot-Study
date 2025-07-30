@@ -1,11 +1,14 @@
-[gd_scene load_steps=8 format=3 uid="uid://cx7tw3e4hgi7n"]
+[gd_scene load_steps=11 format=3 uid="uid://cx7tw3e4hgi7n"]
 
 [ext_resource type="PackedScene" uid="uid://blck4tq3r86bc" path="res://Background/Map.tscn" id="1_glv2v"]
 [ext_resource type="Script" uid="uid://do0vfjkk7iurm" path="res://Main.cs" id="1_r0du0"]
 [ext_resource type="PackedScene" uid="uid://ce5hfqoqubtvg" path="res://Units/Unit.tscn" id="2_uu6xs"]
 [ext_resource type="PackedScene" uid="uid://i3t0kdjbok88" path="res://GameBoard/Cursor/Cursor.tscn" id="3_cm0pq"]
+[ext_resource type="Script" uid="uid://brwygmiom7puq" path="res://GameBoard/GameBoard.cs" id="3_lgr22"]
 [ext_resource type="Resource" uid="uid://djme656lksl2w" path="res://GameBoard/Grid.tres" id="4_fos0i"]
+[ext_resource type="PackedScene" uid="uid://dra7vxsmeyra6" path="res://UnitOverlay/UnitOverlay.tscn" id="4_trn2v"]
 [ext_resource type="Texture2D" uid="uid://byukni47rn6vc" path="res://Units/oiii.png" id="7_lgr22"]
+[ext_resource type="PackedScene" uid="uid://cqri4k5yd6jgh" path="res://GameBoard/UnitPath.tscn" id="7_trn2v"]
 
 [sub_resource type="Curve2D" id="Curve2D_3dxm6"]
 
@@ -14,11 +17,19 @@ script = ExtResource("1_r0du0")
 
 [node name="Map" parent="." instance=ExtResource("1_glv2v")]
 
-[node name="Unit" parent="." instance=ExtResource("2_uu6xs")]
+[node name="GameBoard" type="Node2D" parent="."]
+script = ExtResource("3_lgr22")
+Grid = ExtResource("4_fos0i")
+
+[node name="UnitOverlay" parent="GameBoard" instance=ExtResource("4_trn2v")]
+
+[node name="UnitPath" parent="GameBoard" instance=ExtResource("7_trn2v")]
+
+[node name="Unit" parent="GameBoard" instance=ExtResource("2_uu6xs")]
 position = Vector2(281, 57)
 curve = SubResource("Curve2D_3dxm6")
 Grid = ExtResource("4_fos0i")
 Skin = ExtResource("7_lgr22")
 SkinOffset = Vector2(6, -1)
 
-[node name="Cursor" parent="." instance=ExtResource("3_cm0pq")]
+[node name="Cursor" parent="GameBoard" instance=ExtResource("3_cm0pq")]

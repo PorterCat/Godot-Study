@@ -4,4 +4,7 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <RootNamespace>tacticalrpgmovement</RootNamespace>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="GodotOnReady" Version="1.2.4" />
+  </ItemGroup>
 </Project>

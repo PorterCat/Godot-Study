@@ -63,7 +63,6 @@ _data = {
 script = ExtResource("1_5rqvx")
 
 [node name="PathFollow2D" type="PathFollow2D" parent="."]
-progress = 264027.0
 rotates = false
 loop = false
 
