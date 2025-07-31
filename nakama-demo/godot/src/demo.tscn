@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://m7l7b3khttu6"]
+
+[ext_resource type="Script" uid="uid://dmedru1ie30bx" path="res://src/Demo.cs" id="1_jo5n1"]
+[ext_resource type="Script" uid="uid://bad5o6jjhd652" path="res://src/ServerConnection.cs" id="2_wqa6m"]
+
+[node name="Demo" type="Node"]
+script = ExtResource("1_jo5n1")
+
+[node name="ServerConnection" type="Node" parent="."]
+script = ExtResource("2_wqa6m")
+
+[connection signal="AuthenticationResult" from="ServerConnection" to="." method="OnAuthenticationResult"]
